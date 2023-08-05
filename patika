@@ -1,0 +1,30 @@
+struct FilterCondition<T> {
+    desired_value: T,
+}
+
+impl<T: PartialEq> FilterCondition<T> {
+    fn is_match(&self, item: &T) -> bool {
+        item == &self.desired_value
+    }
+}
+
+fn custom_filter<T>(collection: Vec<T>, filter_condition: &FilterCondition<T>) -> Vec<T>
+where
+    T: PartialEq + Clone,
+{
+    collection
+        .into_iter()
+        .filter(|item| filter_condition.is_match(item))
+        .collect()
+}
+
+fn main() {
+    let original_collection = vec![1, 2, 3, 4, 5, 3, 6, 7, 3];
+
+    let filter_condition = FilterCondition { desired_value: 3 };
+
+    let filtered_collection = custom_filter(original_collection.clone(), &filter_condition);
+
+    println!("Original Collection: {:?}", original_collection);
+    println!("Filtered Collection: {:?}", filtered_collection);
+}
